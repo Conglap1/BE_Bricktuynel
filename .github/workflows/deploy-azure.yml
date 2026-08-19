@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: 'be-bricktuynel' # Thay tên Azure App Service của bạn vào đây
+  AZURE_WEBAPP_NAME: 'gach-thuanloi-api' # Tên App Service trên Azure của bạn
   DOTNET_VERSION: '9.0.x'
 
 jobs:
