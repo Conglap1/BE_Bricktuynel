@@ -8,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 52_428_800; // 50MB
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 

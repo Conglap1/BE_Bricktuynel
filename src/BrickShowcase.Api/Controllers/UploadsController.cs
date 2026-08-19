@@ -22,18 +22,18 @@ public class UploadsController : ControllerBase
     [HttpPost("image")]
     [HttpPost("image/{folder}")]
     [Authorize]
+    [RequestSizeLimit(52_428_800)] // 50MB
     public async Task<IActionResult> UploadImage(IFormFile file, string? folder)
-
     {
         if (file == null || file.Length == 0)
         {
             return BadRequest(new { message = "File không hợp lệ." });
         }
 
-        // Tối đa 10MB
-        if (file.Length > 10 * 1024 * 1024)
+        // Tối đa 50MB
+        if (file.Length > 50 * 1024 * 1024)
         {
-            return BadRequest(new { message = "Kích thước file không được vượt quá 10MB." });
+            return BadRequest(new { message = "Kích thước file không được vượt quá 50MB." });
         }
 
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg" };
