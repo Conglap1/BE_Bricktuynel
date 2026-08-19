@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B03A2E" />
+      <stop offset="100%" stop-color="#641E16" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="#F2D7D5"/>
+  <rect x="150" y="200" width="500" height="200" rx="12" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- Card holes -->
+  <circle cx="250" cy="300" r="35" fill="#421410"/>
+  <circle cx="400" cy="300" r="35" fill="#421410"/>
+  <circle cx="550" cy="300" r="35" fill="#421410"/>
+  <text x="400" y="540" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#641E16" text-anchor="middle">Gạch Thẻ Có Lỗ</text>
+</svg>

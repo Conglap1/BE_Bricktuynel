@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <rect width="200" height="60" rx="8" fill="#F8FAFC"/>
+  <g transform="translate(12, 12)">
+    <path d="M6 30 L16 6 L26 30 Z" fill="#DC2626"/>
+    <path d="M16 6 L26 30 L36 6 Z" fill="#991B1B"/>
+    <text x="42" y="23" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="16" fill="#991B1B" letter-spacing="0">VINACONEX</text>
+    <text x="42" y="32" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="7" fill="#64748B" letter-spacing="1">VIETNAM EXPORT IMPORT &amp; CONST.</text>
+  </g>
+</svg>

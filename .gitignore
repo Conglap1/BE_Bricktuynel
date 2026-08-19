@@ -1,0 +1,25 @@
+## Ignore Visual Studio / VS Code temp files
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.sln.docstates
+.directory
+
+## Ignore Build & Publish Outputs
+bin/
+obj/
+publish/
+publish.zip
+out/
+
+## Ignore Frontend files (belonging to separate FE repository)
+FE SRC/
+Dockerfile.frontend
+nginx.conf
+dev.sh
+photo/
+
+## Ignore OS specific files
+.DS_Store
+Thumbs.db

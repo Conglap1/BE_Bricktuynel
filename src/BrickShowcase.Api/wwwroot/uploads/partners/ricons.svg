@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <rect width="200" height="60" rx="8" fill="#F8FAFC"/>
+  <g transform="translate(15, 12)">
+    <rect x="4" y="6" width="24" height="24" rx="4" fill="#D97706"/>
+    <path d="M12 12 L20 12 C23 12 23 16 20 16 L12 16 Z M12 16 L16 16 L22 24" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <text x="36" y="24" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="18" fill="#B45309" letter-spacing="-0.5">RICONS</text>
+    <text x="36" y="32" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="7" fill="#F59E0B" letter-spacing="1.5">CONSTRUCTION INVESTMENT</text>
+  </g>
+</svg>

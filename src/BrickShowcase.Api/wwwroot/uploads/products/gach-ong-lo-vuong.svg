@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C0392B" />
+      <stop offset="100%" stop-color="#7B241C" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="#FADBD8"/>
+  <rect x="150" y="120" width="500" height="360" rx="16" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- Square Holes -->
+  <rect x="210" y="170" width="90" height="110" rx="8" fill="#5D1D17"/>
+  <rect x="355" y="170" width="90" height="110" rx="8" fill="#5D1D17"/>
+  <rect x="500" y="170" width="90" height="110" rx="8" fill="#5D1D17"/>
+  <rect x="210" y="320" width="90" height="110" rx="8" fill="#5D1D17"/>
+  <rect x="355" y="320" width="90" height="110" rx="8" fill="#5D1D17"/>
+  <rect x="500" y="320" width="90" height="110" rx="8" fill="#5D1D17"/>
+  <text x="400" y="540" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#7B241C" text-anchor="middle">Gạch Ống Lỗ Vuông</text>
+</svg>

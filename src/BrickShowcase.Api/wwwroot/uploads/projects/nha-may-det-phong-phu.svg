@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#455A64"/>
+      <stop offset="100%" stop-color="#90A4AE"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <!-- Factory structure -->
+  <polygon points="100,450 100,250 200,330 200,250 300,330 300,250 400,330 400,450" fill="#37474F" filter="url(#shadow)"/>
+  <rect x="420" y="200" width="280" height="250" fill="#263238" filter="url(#shadow)"/>
+  <!-- Chimney -->
+  <rect x="620" y="100" width="40" height="100" fill="#D84315"/>
+  <rect x="0" y="450" width="800" height="150" fill="#3E2723"/>
+  <text x="400" y="540" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Nhà Máy Dệt Phong Phú</text>
+</svg>

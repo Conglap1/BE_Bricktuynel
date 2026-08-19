@@ -1,0 +1,47 @@
+services:
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: brick_mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Phanconglap1@ProdPass
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql/data
+    restart: always
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: brick_backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=database,1433;Database=BrickCompanyDB;User Id=sa;Password=Phanconglap1@ProdPass;TrustServerCertificate=True;
+      - Jwt__SecretKey=SuperSecretKeyForBrickShowcaseApiProductionEnvironment2026!
+      - Jwt__Issuer=BrickShowcaseApi
+      - Jwt__Audience=BrickShowcaseClient
+      - AllowedOrigins=*
+    ports:
+      - "5247:8080"
+    depends_on:
+      - database
+    restart: always
+    volumes:
+      - uploads_data:/app/wwwroot/uploads
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: brick_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  mssql_data:
+  uploads_data:

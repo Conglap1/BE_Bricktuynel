@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <rect width="200" height="60" rx="8" fill="#F8FAFC"/>
+  <g transform="translate(12, 12)">
+    <polygon points="6,30 18,6 30,30 22,30 18,20 14,30" fill="#4F46E5"/>
+    <text x="36" y="23" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="16" fill="#3730A3" letter-spacing="-0.3">AN PHONG</text>
+    <text x="36" y="32" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="7" fill="#6366F1" letter-spacing="1">CONSTRUCTION CO., LTD</text>
+  </g>
+</svg>
