@@ -6,7 +6,6 @@ public class ContactInfo
     public string CompanyName { get; set; } = string.Empty;
     public string? Address { get; set; }
     public string? Phone { get; set; }
-    public string? Hotline { get; set; }
     public string? Email { get; set; }
     public string? Facebook { get; set; }
     public string? Zalo { get; set; }

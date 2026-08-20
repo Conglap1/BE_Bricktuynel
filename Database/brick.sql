@@ -129,7 +129,6 @@ BEGIN
         CompanyName NVARCHAR(255) NOT NULL,
         Address NVARCHAR(500) NULL,
         Phone NVARCHAR(20) NULL,
-        Hotline NVARCHAR(20) NULL,
         Email NVARCHAR(100) NULL,
         Facebook NVARCHAR(255) NULL,
         Zalo NVARCHAR(255) NULL,
@@ -167,11 +166,10 @@ END;
 /* Contact Info */
 IF NOT EXISTS (SELECT 1 FROM ContactInfo)
 BEGIN
-    INSERT INTO ContactInfo (CompanyName, Address, Phone, Hotline, Email, Facebook, Zalo, Tiktok, GoogleMapEmbed, WorkingHours)
+    INSERT INTO ContactInfo (CompanyName, Address, Phone, Email, Facebook, Zalo, Tiktok, GoogleMapEmbed, WorkingHours)
     VALUES (
         N'CTTNHH 1TV Thuận Lợi Mộc Hóa',
         N'Ấp Mới, Xã Bình Tân, Thị xã Kiến Tường, Tỉnh Long An',
-        N'0918 701 472',
         N'0918 701 472',
         N'kinhdoanh@gachthuanloi.vn',
         N'https://facebook.com',

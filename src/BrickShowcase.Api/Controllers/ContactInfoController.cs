@@ -26,10 +26,9 @@ public class ContactInfoController : ControllerBase
         {
             info = new ContactInfo
             {
-                CompanyName = "Công ty TNHH Gạch Thuận Lợi",
-                Address = "KCN Mỹ Phước, Bến Cát, Bình Dương",
-                Phone = "0908 555 888",
-                Hotline = "1900 1234",
+                CompanyName = "CTTNHH 1TV Thuận Lợi Mộc Hóa",
+                Address = "Ấp Mới, Xã Bình Tân, Thị xã Kiến Tường, Tỉnh Long An",
+                Phone = "0918 701 472",
                 Email = "kinhdoanh@gachthuanloi.vn",
                 WorkingHours = "T2 – T7 · 07:30 – 17:30"
             };
@@ -38,7 +37,7 @@ public class ContactInfoController : ControllerBase
         }
         else if (info.CompanyName.Contains("Tuynel") || info.CompanyName.Contains("Trường Sơn"))
         {
-            info.CompanyName = "Công ty TNHH Gạch Thuận Lợi";
+            info.CompanyName = "CTTNHH 1TV Thuận Lợi Mộc Hóa";
             await _db.SaveChangesAsync();
         }
 
@@ -48,7 +47,6 @@ public class ContactInfoController : ControllerBase
     [HttpPut]
     [Authorize]
     public async Task<ActionResult<ContactInfoDto>> Update([FromBody] ContactInfoDto dto)
-
     {
         var info = await _db.ContactInfo.FirstOrDefaultAsync();
         if (info == null)
@@ -60,7 +58,6 @@ public class ContactInfoController : ControllerBase
         info.CompanyName = dto.CompanyName;
         info.Address = dto.Address;
         info.Phone = dto.Phone;
-        info.Hotline = dto.Hotline;
         info.Email = dto.Email;
         info.Facebook = dto.Facebook;
         info.Zalo = dto.Zalo;
@@ -73,5 +70,5 @@ public class ContactInfoController : ControllerBase
     }
 
     private static ContactInfoDto MapToDto(ContactInfo c) =>
-        new(c.Id, c.CompanyName, c.Address, c.Phone, c.Hotline, c.Email, c.Facebook, c.Zalo, c.Tiktok, c.GoogleMapEmbed, c.WorkingHours);
+        new(c.Id, c.CompanyName, c.Address, c.Phone, c.Email, c.Facebook, c.Zalo, c.Tiktok, c.GoogleMapEmbed, c.WorkingHours);
 }

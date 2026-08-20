@@ -109,7 +109,6 @@ public record ContactInfoDto(
     string CompanyName,
     string? Address,
     string? Phone,
-    string? Hotline,
     string? Email,
     string? Facebook,
     string? Zalo,

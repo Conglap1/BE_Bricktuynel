@@ -130,7 +130,6 @@ public class ContactInfoConfiguration : IEntityTypeConfiguration<ContactInfo>
         builder.Property(x => x.CompanyName).HasMaxLength(255).IsRequired();
         builder.Property(x => x.Address).HasMaxLength(500);
         builder.Property(x => x.Phone).HasMaxLength(20);
-        builder.Property(x => x.Hotline).HasMaxLength(20);
         builder.Property(x => x.Email).HasMaxLength(100);
         builder.Property(x => x.Facebook).HasMaxLength(255);
         builder.Property(x => x.Zalo).HasMaxLength(255);
