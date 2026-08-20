@@ -169,13 +169,13 @@ IF NOT EXISTS (SELECT 1 FROM ContactInfo)
 BEGIN
     INSERT INTO ContactInfo (CompanyName, Address, Phone, Hotline, Email, Facebook, Zalo, Tiktok, GoogleMapEmbed, WorkingHours)
     VALUES (
-        N'Công ty TNHH Gạch Thuận Lợi',
-        N'KCN Mỹ Phước, Bến Cát, Bình Dương',
-        N'0908 555 888',
-        N'1900 1234',
+        N'CTTNHH 1TV Thuận Lợi Mộc Hóa',
+        N'Ấp Mới, Xã Bình Tân, Thị xã Kiến Tường, Tỉnh Long An',
+        N'0918 701 472',
+        N'0918 701 472',
         N'kinhdoanh@gachthuanloi.vn',
         N'https://facebook.com',
-        N'0908555888',
+        N'0918701472',
         N'https://tiktok.com',
         N'https://maps.google.com/maps?q=KCN+My+Phuoc,+Ben+Cat,+Binh+Duong,+Vietnam&t=&z=14&ie=UTF8&iwloc=&output=embed',
         N'T2 – T7 · 07:30 – 17:30'
