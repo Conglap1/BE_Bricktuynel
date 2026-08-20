@@ -26,7 +26,7 @@ public class ContactInfoController : ControllerBase
         {
             info = new ContactInfo
             {
-                CompanyName = "CTTNHH 1TV Thuận Lợi Mộc Hóa",
+                CompanyName = "Công ty TNHH Một Thành Viên Thuận Lợi Mộc Hóa",
                 Address = "Ấp Mới, Xã Bình Tân, Thị xã Kiến Tường, Tỉnh Long An",
                 Phone = "0918 701 472",
                 Email = "kinhdoanh@gachthuanloi.vn",
@@ -35,9 +35,9 @@ public class ContactInfoController : ControllerBase
             _db.ContactInfo.Add(info);
             await _db.SaveChangesAsync();
         }
-        else if (info.CompanyName.Contains("Tuynel") || info.CompanyName.Contains("Trường Sơn"))
+        else if (info.CompanyName.Contains("Tuynel") || info.CompanyName.Contains("Trường Sơn") || info.CompanyName.Contains("CTTNHH") || info.CompanyName.Contains("MTV") || info.CompanyName.Contains("1TV"))
         {
-            info.CompanyName = "CTTNHH 1TV Thuận Lợi Mộc Hóa";
+            info.CompanyName = "Công ty TNHH Một Thành Viên Thuận Lợi Mộc Hóa";
             await _db.SaveChangesAsync();
         }
 

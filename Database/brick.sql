@@ -168,7 +168,7 @@ IF NOT EXISTS (SELECT 1 FROM ContactInfo)
 BEGIN
     INSERT INTO ContactInfo (CompanyName, Address, Phone, Email, Facebook, Zalo, Tiktok, GoogleMapEmbed, WorkingHours)
     VALUES (
-        N'CTTNHH 1TV Thuận Lợi Mộc Hóa',
+        N'Công ty TNHH Một Thành Viên Thuận Lợi Mộc Hóa',
         N'Ấp Mới, Xã Bình Tân, Thị xã Kiến Tường, Tỉnh Long An',
         N'0918 701 472',
         N'kinhdoanh@gachthuanloi.vn',
