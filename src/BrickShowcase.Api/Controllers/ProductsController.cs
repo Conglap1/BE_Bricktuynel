@@ -64,8 +64,6 @@ public class ProductsController : ControllerBase
             Height = dto.Height,
             CompressionStrength = dto.CompressionStrength,
             FlexuralStrength = dto.FlexuralStrength,
-            BulkDensity = dto.BulkDensity,
-            WaterAbsorption = dto.WaterAbsorption,
             BrickGrade = dto.BrickGrade,
             IsFeatured = dto.IsFeatured,
             DisplayOrder = dto.DisplayOrder,
@@ -116,8 +114,6 @@ public class ProductsController : ControllerBase
         product.Height = dto.Height;
         product.CompressionStrength = dto.CompressionStrength;
         product.FlexuralStrength = dto.FlexuralStrength;
-        product.BulkDensity = dto.BulkDensity;
-        product.WaterAbsorption = dto.WaterAbsorption;
         product.BrickGrade = dto.BrickGrade;
         product.IsFeatured = dto.IsFeatured;
         product.DisplayOrder = dto.DisplayOrder;
@@ -177,8 +173,6 @@ public class ProductsController : ControllerBase
             p.Height,
             p.CompressionStrength,
             p.FlexuralStrength,
-            p.BulkDensity,
-            p.WaterAbsorption,
             p.BrickGrade,
             p.IsFeatured,
             p.DisplayOrder,

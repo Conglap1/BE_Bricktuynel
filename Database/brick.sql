@@ -36,8 +36,6 @@ BEGIN
         Height DECIMAL(10,2) NULL,
         CompressionStrength DECIMAL(10,2) NULL,
         FlexuralStrength DECIMAL(10,2) NULL,
-        BulkDensity DECIMAL(10,2) NULL,
-        WaterAbsorption DECIMAL(5,2) NULL,
         BrickGrade NVARCHAR(50) NULL,
         IsFeatured BIT NOT NULL DEFAULT(0),
         DisplayOrder INT NOT NULL DEFAULT(0),
@@ -199,10 +197,10 @@ END;
 /* Seed Products */
 IF NOT EXISTS (SELECT 1 FROM Product)
 BEGIN
-    INSERT INTO Product (Name, Slug, ShortDescription, Description, Length, Width, Height, CompressionStrength, FlexuralStrength, BulkDensity, WaterAbsorption, BrickGrade, IsFeatured, DisplayOrder, IsActive)
+    INSERT INTO Product (Name, Slug, ShortDescription, Description, Length, Width, Height, CompressionStrength, FlexuralStrength, BrickGrade, IsFeatured, DisplayOrder, IsActive)
     VALUES
-    (N'Gạch đất sét nung 2 lỗ (40x80x180 mm)', N'gach-dat-set-nung-2-lo-40x80x180', N'Gạch đất sét nung Tuynel 2 lỗ (gạch thẻ 2 lỗ) đạt quy chuẩn QCVN 16:2023/BXD & TCVN 6355:2009.', N'Sản phẩm gạch đất sét nung loại 2 lỗ Tuynel Thuận Lợi Mộc Hóa được sản xuất trên dây chuyền công nghệ cao, nung trong lò Tuynel liên tục ở nhiệt độ 1.050°C. Đạt chứng nhận hợp quy QCVN 16:2023/BXD, mác gạch M75, độ chịu nén vượt trội và độ hút nước thấp.', 180, 80, 40, 7.90, 1.90, 1.49, 11.30, N'Mác 75', 1, 1, 1),
-    (N'Gạch đất sét nung 4 lỗ (80x80x180 mm)', N'gach-dat-set-nung-4-lo-80x80x180', N'Gạch đất sét nung Tuynel 4 lỗ (gạch ống 4 lỗ) đạt hợp quy QCVN 16:2023/BXD, Mác 75.', N'Gạch 4 lỗ Tuynel Thuận Lợi Mộc Hóa chuẩn kích thước 80x80x180 mm, nung lò Tuynel công nghệ nén ép đùn chân không. Độ chịu nén trung bình 7.7 - 8.1 MPa, khối lượng thể tích 0.96 g/cm³, độ hút nước 11.9 - 12.8%, tối ưu cho xây dựng tường bao và công trình dân dụng.', 180, 80, 80, 7.70, 1.80, 0.96, 12.80, N'Mác 75', 1, 2, 1);
+    (N'Gạch đất sét nung 2 lỗ (40x80x180 mm)', N'gach-dat-set-nung-2-lo-40x80x180', N'Gạch đất sét nung Tuynel 2 lỗ (gạch thẻ 2 lỗ) đạt quy chuẩn QCVN 16:2023/BXD & TCVN 6355:2009.', N'Sản phẩm gạch đất sét nung loại 2 lỗ Tuynel Thuận Lợi Mộc Hóa được sản xuất trên dây chuyền công nghệ cao, nung trong lò Tuynel liên tục ở nhiệt độ 1.050°C. Đạt chứng nhận hợp quy QCVN 16:2023/BXD, mác gạch M75, độ chịu nén vượt trội và độ hút nước thấp.', 180, 80, 40, 7.90, 1.90, N'Mác 75', 1, 1, 1),
+    (N'Gạch đất sét nung 4 lỗ (80x80x180 mm)', N'gach-dat-set-nung-4-lo-80x80x180', N'Gạch đất sét nung Tuynel 4 lỗ (gạch ống 4 lỗ) đạt hợp quy QCVN 16:2023/BXD, Mác 75.', N'Gạch 4 lỗ Tuynel Thuận Lợi Mộc Hóa chuẩn kích thước 80x80x180 mm, nung lò Tuynel công nghệ nén ép đùn chân không. Độ chịu nén trung bình 7.7 - 8.1 MPa, khối lượng thể tích 0.96 g/cm³, độ hút nước 11.9 - 12.8%, tối ưu cho xây dựng tường bao và công trình dân dụng.', 180, 80, 80, 7.70, 1.80, N'Mác 75', 1, 2, 1);
 
     INSERT INTO ProductImage (ProductId, ImagePath, IsThumbnail, DisplayOrder)
     VALUES

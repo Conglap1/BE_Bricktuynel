@@ -12,8 +12,6 @@ public class Product
     public decimal? Height { get; set; }
     public decimal? CompressionStrength { get; set; }
     public decimal? FlexuralStrength { get; set; }
-    public decimal? BulkDensity { get; set; }
-    public decimal? WaterAbsorption { get; set; }
     public string? BrickGrade { get; set; }
     public bool IsFeatured { get; set; } = false;
     public int DisplayOrder { get; set; } = 0;

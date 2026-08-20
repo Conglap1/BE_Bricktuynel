@@ -20,10 +20,6 @@ public static class DbInitializer
                 "ALTER TABLE Product ADD FlexuralStrength DECIMAL(10,2) NULL;"
             );
             await db.Database.ExecuteSqlRawAsync(
-                "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Product') AND name = 'BulkDensity') " +
-                "ALTER TABLE Product ADD BulkDensity DECIMAL(10,2) NULL;"
-            );
-            await db.Database.ExecuteSqlRawAsync(
                 "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Product') AND name = 'BrickGrade') " +
                 "ALTER TABLE Product ADD BrickGrade NVARCHAR(50) NULL;"
             );
@@ -56,8 +52,6 @@ public static class DbInitializer
                 Height = 40,
                 CompressionStrength = 7.9m,
                 FlexuralStrength = 1.9m,
-                BulkDensity = 1.49m,
-                WaterAbsorption = 11.3m,
                 BrickGrade = "Mác 75",
                 IsFeatured = true,
                 DisplayOrder = 1,
@@ -76,8 +70,6 @@ public static class DbInitializer
                 Height = 80,
                 CompressionStrength = 7.7m,
                 FlexuralStrength = 1.8m,
-                BulkDensity = 0.96m,
-                WaterAbsorption = 12.8m,
                 BrickGrade = "Mác 75",
                 IsFeatured = true,
                 DisplayOrder = 2,
