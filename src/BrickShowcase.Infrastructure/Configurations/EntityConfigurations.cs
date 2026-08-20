@@ -29,13 +29,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Length).HasColumnType("decimal(10,2)");
         builder.Property(x => x.Width).HasColumnType("decimal(10,2)");
         builder.Property(x => x.Height).HasColumnType("decimal(10,2)");
-        builder.Property(x => x.Weight).HasColumnType("decimal(10,2)");
         builder.Property(x => x.CompressionStrength).HasColumnType("decimal(10,2)");
         builder.Property(x => x.FlexuralStrength).HasColumnType("decimal(10,2)");
         builder.Property(x => x.BulkDensity).HasColumnType("decimal(10,2)");
         builder.Property(x => x.WaterAbsorption).HasColumnType("decimal(5,2)");
         builder.Property(x => x.BrickGrade).HasMaxLength(50);
-        builder.Property(x => x.StandardCode).HasMaxLength(100);
         builder.Property(x => x.IsFeatured).HasDefaultValue(false);
         builder.Property(x => x.DisplayOrder).HasDefaultValue(0);
         builder.Property(x => x.IsActive).HasDefaultValue(true);

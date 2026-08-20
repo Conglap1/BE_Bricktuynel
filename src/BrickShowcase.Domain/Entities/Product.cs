@@ -10,14 +10,11 @@ public class Product
     public decimal? Length { get; set; }
     public decimal? Width { get; set; }
     public decimal? Height { get; set; }
-    public decimal? Weight { get; set; }
-    public int? HoleCount { get; set; }
     public decimal? CompressionStrength { get; set; }
     public decimal? FlexuralStrength { get; set; }
     public decimal? BulkDensity { get; set; }
     public decimal? WaterAbsorption { get; set; }
     public string? BrickGrade { get; set; }
-    public string? StandardCode { get; set; }
     public bool IsFeatured { get; set; } = false;
     public int DisplayOrder { get; set; } = 0;
     public bool IsActive { get; set; } = true;

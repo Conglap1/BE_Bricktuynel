@@ -27,10 +27,6 @@ public static class DbInitializer
                 "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Product') AND name = 'BrickGrade') " +
                 "ALTER TABLE Product ADD BrickGrade NVARCHAR(50) NULL;"
             );
-            await db.Database.ExecuteSqlRawAsync(
-                "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Product') AND name = 'StandardCode') " +
-                "ALTER TABLE Product ADD StandardCode NVARCHAR(100) NULL;"
-            );
         }
         catch { }
 
@@ -58,14 +54,11 @@ public static class DbInitializer
                 Length = 180,
                 Width = 80,
                 Height = 40,
-                Weight = 1.1m,
-                HoleCount = 2,
                 CompressionStrength = 7.9m,
                 FlexuralStrength = 1.9m,
                 BulkDensity = 1.49m,
                 WaterAbsorption = 11.3m,
                 BrickGrade = "Mác 75",
-                StandardCode = "QCVN 16:2023/BXD",
                 IsFeatured = true,
                 DisplayOrder = 1,
                 IsActive = true,
@@ -81,14 +74,11 @@ public static class DbInitializer
                 Length = 180,
                 Width = 80,
                 Height = 80,
-                Weight = 1.6m,
-                HoleCount = 4,
                 CompressionStrength = 7.7m,
                 FlexuralStrength = 1.8m,
                 BulkDensity = 0.96m,
                 WaterAbsorption = 12.8m,
                 BrickGrade = "Mác 75",
-                StandardCode = "QCVN 16:2023/BXD",
                 IsFeatured = true,
                 DisplayOrder = 2,
                 IsActive = true,

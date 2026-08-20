@@ -62,14 +62,11 @@ public class ProductsController : ControllerBase
             Length = dto.Length,
             Width = dto.Width,
             Height = dto.Height,
-            Weight = dto.Weight,
-            HoleCount = dto.HoleCount,
             CompressionStrength = dto.CompressionStrength,
             FlexuralStrength = dto.FlexuralStrength,
             BulkDensity = dto.BulkDensity,
             WaterAbsorption = dto.WaterAbsorption,
             BrickGrade = dto.BrickGrade,
-            StandardCode = dto.StandardCode,
             IsFeatured = dto.IsFeatured,
             DisplayOrder = dto.DisplayOrder,
             IsActive = dto.IsActive,
@@ -117,14 +114,11 @@ public class ProductsController : ControllerBase
         product.Length = dto.Length;
         product.Width = dto.Width;
         product.Height = dto.Height;
-        product.Weight = dto.Weight;
-        product.HoleCount = dto.HoleCount;
         product.CompressionStrength = dto.CompressionStrength;
         product.FlexuralStrength = dto.FlexuralStrength;
         product.BulkDensity = dto.BulkDensity;
         product.WaterAbsorption = dto.WaterAbsorption;
         product.BrickGrade = dto.BrickGrade;
-        product.StandardCode = dto.StandardCode;
         product.IsFeatured = dto.IsFeatured;
         product.DisplayOrder = dto.DisplayOrder;
         product.IsActive = dto.IsActive;
@@ -181,14 +175,11 @@ public class ProductsController : ControllerBase
             p.Length,
             p.Width,
             p.Height,
-            p.Weight,
-            p.HoleCount,
             p.CompressionStrength,
             p.FlexuralStrength,
             p.BulkDensity,
             p.WaterAbsorption,
             p.BrickGrade,
-            p.StandardCode,
             p.IsFeatured,
             p.DisplayOrder,
             p.IsActive,
