@@ -3,6 +3,22 @@
 -- (Tương thích 100% với Backend .NET 9 EF Core)
 -- ==========================================================
 
+/* ----------------------------------------------------------
+   LƯU Ý: Nếu muốn XÓA SẠCH dữ liệu cũ để làm lại từ đầu,
+   bạn mở comment các dòng DROP TABLE bên dưới và chạy script:
+---------------------------------------------------------- */
+/*
+IF OBJECT_ID('ProductImage', 'U') IS NOT NULL DROP TABLE ProductImage;
+IF OBJECT_ID('Product', 'U') IS NOT NULL DROP TABLE Product;
+IF OBJECT_ID('ProjectImage', 'U') IS NOT NULL DROP TABLE ProjectImage;
+IF OBJECT_ID('Project', 'U') IS NOT NULL DROP TABLE Project;
+IF OBJECT_ID('News', 'U') IS NOT NULL DROP TABLE News;
+IF OBJECT_ID('Partner', 'U') IS NOT NULL DROP TABLE Partner;
+IF OBJECT_ID('ContactRequest', 'U') IS NOT NULL DROP TABLE ContactRequest;
+IF OBJECT_ID('ContactInfo', 'U') IS NOT NULL DROP TABLE ContactInfo;
+IF OBJECT_ID('AdminUser', 'U') IS NOT NULL DROP TABLE AdminUser;
+*/
+
 /* 1. AdminUser */
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'AdminUser')
 BEGIN
