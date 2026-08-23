@@ -104,8 +104,47 @@ public class NewsConfiguration : IEntityTypeConfiguration<News>
         builder.Property(x => x.ThumbnailPath).HasMaxLength(500);
         builder.Property(x => x.IsActive).HasDefaultValue(true);
         builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+
+        builder.HasMany(x => x.Sections)
+            .WithOne(x => x.News)
+            .HasForeignKey(x => x.NewsId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.Images)
+            .WithOne(x => x.News)
+            .HasForeignKey(x => x.NewsId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
+
+public class NewsSectionConfiguration : IEntityTypeConfiguration<NewsSection>
+{
+    public void Configure(EntityTypeBuilder<NewsSection> builder)
+    {
+        builder.ToTable("NewsSection");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Question).HasMaxLength(500);
+        builder.Property(x => x.DisplayOrder).HasDefaultValue(0);
+
+        builder.HasMany(x => x.Images)
+            .WithOne(x => x.NewsSection)
+            .HasForeignKey(x => x.NewsSectionId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+}
+
+public class NewsImageConfiguration : IEntityTypeConfiguration<NewsImage>
+{
+    public void Configure(EntityTypeBuilder<NewsImage> builder)
+    {
+        builder.ToTable("NewsImage");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.ImagePath).HasMaxLength(500).IsRequired();
+        builder.Property(x => x.Caption).HasMaxLength(500);
+        builder.Property(x => x.DisplayOrder).HasDefaultValue(0);
+    }
+}
+
 
 public class PartnerConfiguration : IEntityTypeConfiguration<Partner>
 {

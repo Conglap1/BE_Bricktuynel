@@ -21,7 +21,12 @@ public class NewsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<NewsDto>>> GetAll([FromQuery] bool? activeOnly)
     {
-        var query = _db.News.AsQueryable();
+        var query = _db.News
+            .Include(n => n.Sections.OrderBy(s => s.DisplayOrder))
+                .ThenInclude(s => s.Images.OrderBy(img => img.DisplayOrder))
+            .Include(n => n.Images.Where(img => img.NewsSectionId == null).OrderBy(img => img.DisplayOrder))
+            .AsQueryable();
+
         if (activeOnly == true)
         {
             query = query.Where(n => n.IsActive);
@@ -35,13 +40,18 @@ public class NewsController : ControllerBase
     public async Task<ActionResult<NewsDto>> GetByIdOrSlug(string idOrSlug)
     {
         News? news = null;
+        var query = _db.News
+            .Include(n => n.Sections.OrderBy(s => s.DisplayOrder))
+                .ThenInclude(s => s.Images.OrderBy(img => img.DisplayOrder))
+            .Include(n => n.Images.Where(img => img.NewsSectionId == null).OrderBy(img => img.DisplayOrder));
+
         if (int.TryParse(idOrSlug, out int id))
         {
-            news = await _db.News.FindAsync(id);
+            news = await query.FirstOrDefaultAsync(n => n.Id == id);
         }
         else
         {
-            news = await _db.News.FirstOrDefaultAsync(n => n.Slug == idOrSlug);
+            news = await query.FirstOrDefaultAsync(n => n.Slug == idOrSlug);
         }
 
         if (news == null) return NotFound();
@@ -67,6 +77,46 @@ public class NewsController : ControllerBase
             CreatedAt = DateTime.UtcNow
         };
 
+        if (dto.Sections != null && dto.Sections.Any())
+        {
+            foreach (var secDto in dto.Sections)
+            {
+                var section = new NewsSection
+                {
+                    Question = secDto.Question,
+                    Answer = secDto.Answer,
+                    DisplayOrder = secDto.DisplayOrder
+                };
+
+                if (secDto.Images != null && secDto.Images.Any())
+                {
+                    foreach (var imgDto in secDto.Images)
+                    {
+                        section.Images.Add(new NewsImage
+                        {
+                            ImagePath = imgDto.ImagePath,
+                            Caption = imgDto.Caption,
+                            DisplayOrder = imgDto.DisplayOrder
+                        });
+                    }
+                }
+                news.Sections.Add(section);
+            }
+        }
+
+        if (dto.Images != null && dto.Images.Any())
+        {
+            foreach (var imgDto in dto.Images)
+            {
+                news.Images.Add(new NewsImage
+                {
+                    ImagePath = imgDto.ImagePath,
+                    Caption = imgDto.Caption,
+                    DisplayOrder = imgDto.DisplayOrder
+                });
+            }
+        }
+
         _db.News.Add(news);
         await _db.SaveChangesAsync();
 
@@ -77,7 +127,12 @@ public class NewsController : ControllerBase
     [Authorize]
     public async Task<ActionResult<NewsDto>> Update(int id, [FromBody] UpsertNewsDto dto)
     {
-        var news = await _db.News.FindAsync(id);
+        var news = await _db.News
+            .Include(n => n.Sections)
+                .ThenInclude(s => s.Images)
+            .Include(n => n.Images)
+            .FirstOrDefaultAsync(n => n.Id == id);
+
         if (news == null) return NotFound();
 
         DateTime? pubAt = null;
@@ -92,6 +147,53 @@ public class NewsController : ControllerBase
         news.IsActive = dto.IsActive;
         news.UpdatedAt = DateTime.UtcNow;
 
+        // Clear existing sections & images
+        _db.NewsImage.RemoveRange(news.Images);
+        _db.NewsSection.RemoveRange(news.Sections);
+
+        news.Sections.Clear();
+        news.Images.Clear();
+
+        if (dto.Sections != null && dto.Sections.Any())
+        {
+            foreach (var secDto in dto.Sections)
+            {
+                var section = new NewsSection
+                {
+                    Question = secDto.Question,
+                    Answer = secDto.Answer,
+                    DisplayOrder = secDto.DisplayOrder
+                };
+
+                if (secDto.Images != null && secDto.Images.Any())
+                {
+                    foreach (var imgDto in secDto.Images)
+                    {
+                        section.Images.Add(new NewsImage
+                        {
+                            ImagePath = imgDto.ImagePath,
+                            Caption = imgDto.Caption,
+                            DisplayOrder = imgDto.DisplayOrder
+                        });
+                    }
+                }
+                news.Sections.Add(section);
+            }
+        }
+
+        if (dto.Images != null && dto.Images.Any())
+        {
+            foreach (var imgDto in dto.Images)
+            {
+                news.Images.Add(new NewsImage
+                {
+                    ImagePath = imgDto.ImagePath,
+                    Caption = imgDto.Caption,
+                    DisplayOrder = imgDto.DisplayOrder
+                });
+            }
+        }
+
         await _db.SaveChangesAsync();
         return Ok(MapToDto(news));
     }
@@ -99,7 +201,6 @@ public class NewsController : ControllerBase
     [HttpDelete("{id}")]
     [Authorize]
     public async Task<IActionResult> Delete(int id)
-
     {
         var news = await _db.News.FindAsync(id);
         if (news == null) return NotFound();
@@ -111,6 +212,33 @@ public class NewsController : ControllerBase
 
     private static NewsDto MapToDto(News n)
     {
+        var sectionDtos = n.Sections?
+            .OrderBy(s => s.DisplayOrder)
+            .Select(s => new NewsSectionDto(
+                s.Id,
+                s.Question,
+                s.Answer,
+                s.DisplayOrder,
+                s.Images?.OrderBy(img => img.DisplayOrder).Select(img => new NewsImageDto(
+                    img.Id,
+                    img.ImagePath,
+                    img.Caption,
+                    img.DisplayOrder,
+                    img.NewsSectionId
+                )).ToList()
+            )).ToList();
+
+        var imageDtos = n.Images?
+            .Where(img => img.NewsSectionId == null)
+            .OrderBy(img => img.DisplayOrder)
+            .Select(img => new NewsImageDto(
+                img.Id,
+                img.ImagePath,
+                img.Caption,
+                img.DisplayOrder,
+                img.NewsSectionId
+            )).ToList();
+
         return new NewsDto(
             n.Id,
             n.Title,
@@ -119,7 +247,9 @@ public class NewsController : ControllerBase
             n.Summary,
             n.Content,
             n.PublishedAt?.ToString("yyyy-MM-dd"),
-            n.IsActive
+            n.IsActive,
+            sectionDtos,
+            imageDtos
         );
     }
 

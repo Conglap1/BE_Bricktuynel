@@ -12,4 +12,8 @@ public class News
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
+
+    public ICollection<NewsSection> Sections { get; set; } = new List<NewsSection>();
+    public ICollection<NewsImage> Images { get; set; } = new List<NewsImage>();
 }
+

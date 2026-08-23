@@ -66,6 +66,36 @@ public record UpsertProjectDto(
     List<string>? Images = null
 );
 
+public record NewsImageDto(
+    int Id,
+    string ImagePath,
+    string? Caption,
+    int DisplayOrder,
+    int? NewsSectionId = null
+);
+
+public record UpsertNewsImageDto(
+    string ImagePath,
+    string? Caption,
+    int DisplayOrder = 0,
+    int? NewsSectionId = null
+);
+
+public record NewsSectionDto(
+    int Id,
+    string? Question,
+    string? Answer,
+    int DisplayOrder,
+    List<NewsImageDto>? Images = null
+);
+
+public record UpsertNewsSectionDto(
+    string? Question,
+    string? Answer,
+    int DisplayOrder = 0,
+    List<UpsertNewsImageDto>? Images = null
+);
+
 public record NewsDto(
     int Id,
     string Title,
@@ -74,7 +104,9 @@ public record NewsDto(
     string? Summary,
     string? Content,
     string? PublishedAt,
-    bool IsActive
+    bool IsActive,
+    List<NewsSectionDto>? Sections = null,
+    List<NewsImageDto>? Images = null
 );
 
 public record UpsertNewsDto(
@@ -84,8 +116,11 @@ public record UpsertNewsDto(
     string? Summary,
     string? Content,
     string? PublishedAt,
-    bool IsActive
+    bool IsActive,
+    List<UpsertNewsSectionDto>? Sections = null,
+    List<UpsertNewsImageDto>? Images = null
 );
+
 
 public record PartnerDto(
     int Id,

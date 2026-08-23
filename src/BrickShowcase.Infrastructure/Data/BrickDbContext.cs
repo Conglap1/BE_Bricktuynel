@@ -15,6 +15,8 @@ public class BrickDbContext : DbContext
     public DbSet<Project> Project => Set<Project>();
     public DbSet<ProjectImage> ProjectImage => Set<ProjectImage>();
     public DbSet<News> News => Set<News>();
+    public DbSet<NewsSection> NewsSection => Set<NewsSection>();
+    public DbSet<NewsImage> NewsImage => Set<NewsImage>();
     public DbSet<Partner> Partner => Set<Partner>();
     public DbSet<ContactInfo> ContactInfo => Set<ContactInfo>();
     public DbSet<ContactRequest> ContactRequest => Set<ContactRequest>();
