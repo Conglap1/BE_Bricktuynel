@@ -23,8 +23,35 @@ public static class DbInitializer
                 "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Product') AND name = 'BrickGrade') " +
                 "ALTER TABLE Product ADD BrickGrade NVARCHAR(50) NULL;"
             );
+            await db.Database.ExecuteSqlRawAsync(
+                "IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'NewsSection') " +
+                "CREATE TABLE NewsSection (" +
+                "    Id INT IDENTITY(1,1) PRIMARY KEY," +
+                "    NewsId INT NOT NULL," +
+                "    Question NVARCHAR(500) NULL," +
+                "    Answer NVARCHAR(MAX) NULL," +
+                "    DisplayOrder INT NOT NULL DEFAULT(0)," +
+                "    CONSTRAINT FK_NewsSection_News FOREIGN KEY(NewsId) REFERENCES News(Id) ON DELETE CASCADE" +
+                ");"
+            );
+            await db.Database.ExecuteSqlRawAsync(
+                "IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'NewsImage') " +
+                "CREATE TABLE NewsImage (" +
+                "    Id INT IDENTITY(1,1) PRIMARY KEY," +
+                "    NewsId INT NOT NULL," +
+                "    NewsSectionId INT NULL," +
+                "    ImagePath NVARCHAR(500) NOT NULL," +
+                "    Caption NVARCHAR(500) NULL," +
+                "    DisplayOrder INT NOT NULL DEFAULT(0)," +
+                "    CONSTRAINT FK_NewsImage_News FOREIGN KEY(NewsId) REFERENCES News(Id) ON DELETE CASCADE," +
+                "    CONSTRAINT FK_NewsImage_NewsSection FOREIGN KEY(NewsSectionId) REFERENCES NewsSection(Id) ON DELETE NO ACTION" +
+                ");"
+            );
         }
-        catch { }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DB MIGRATION ERROR]: {ex.Message}");
+        }
 
         // Seed AdminUser if not exists
         var adminUser = await db.AdminUser.FirstOrDefaultAsync(u => u.Username == "admin");
