@@ -92,12 +92,16 @@ public class NewsController : ControllerBase
                 {
                     foreach (var imgDto in secDto.Images)
                     {
-                        section.Images.Add(new NewsImage
+                        if (!string.IsNullOrWhiteSpace(imgDto.ImagePath))
                         {
-                            ImagePath = imgDto.ImagePath,
-                            Caption = imgDto.Caption,
-                            DisplayOrder = imgDto.DisplayOrder
-                        });
+                            section.Images.Add(new NewsImage
+                            {
+                                News = news,
+                                ImagePath = imgDto.ImagePath,
+                                Caption = imgDto.Caption,
+                                DisplayOrder = imgDto.DisplayOrder
+                            });
+                        }
                     }
                 }
                 news.Sections.Add(section);
@@ -108,12 +112,15 @@ public class NewsController : ControllerBase
         {
             foreach (var imgDto in dto.Images)
             {
-                news.Images.Add(new NewsImage
+                if (!string.IsNullOrWhiteSpace(imgDto.ImagePath))
                 {
-                    ImagePath = imgDto.ImagePath,
-                    Caption = imgDto.Caption,
-                    DisplayOrder = imgDto.DisplayOrder
-                });
+                    news.Images.Add(new NewsImage
+                    {
+                        ImagePath = imgDto.ImagePath,
+                        Caption = imgDto.Caption,
+                        DisplayOrder = imgDto.DisplayOrder
+                    });
+                }
             }
         }
 
@@ -169,12 +176,16 @@ public class NewsController : ControllerBase
                 {
                     foreach (var imgDto in secDto.Images)
                     {
-                        section.Images.Add(new NewsImage
+                        if (!string.IsNullOrWhiteSpace(imgDto.ImagePath))
                         {
-                            ImagePath = imgDto.ImagePath,
-                            Caption = imgDto.Caption,
-                            DisplayOrder = imgDto.DisplayOrder
-                        });
+                            section.Images.Add(new NewsImage
+                            {
+                                News = news,
+                                ImagePath = imgDto.ImagePath,
+                                Caption = imgDto.Caption,
+                                DisplayOrder = imgDto.DisplayOrder
+                            });
+                        }
                     }
                 }
                 news.Sections.Add(section);
@@ -185,12 +196,15 @@ public class NewsController : ControllerBase
         {
             foreach (var imgDto in dto.Images)
             {
-                news.Images.Add(new NewsImage
+                if (!string.IsNullOrWhiteSpace(imgDto.ImagePath))
                 {
-                    ImagePath = imgDto.ImagePath,
-                    Caption = imgDto.Caption,
-                    DisplayOrder = imgDto.DisplayOrder
-                });
+                    news.Images.Add(new NewsImage
+                    {
+                        ImagePath = imgDto.ImagePath,
+                        Caption = imgDto.Caption,
+                        DisplayOrder = imgDto.DisplayOrder
+                    });
+                }
             }
         }
 
