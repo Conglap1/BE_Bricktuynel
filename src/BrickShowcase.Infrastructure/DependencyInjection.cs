@@ -17,7 +17,7 @@ public static class DependencyInjection
         services.AddDbContext<BrickDbContext>(options =>
             options.UseSqlServer(connectionString));
 
-        services.AddScoped<IFileStorageService, FileStorageService>();
+        services.AddScoped<IFileStorageService, CloudinaryStorageService>();
 
         return services;
     }
