@@ -43,7 +43,14 @@ public class FileStorageService : IFileStorageService
 
         // Clean leading slash if any
         var trimmedPath = relativePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
-        var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", trimmedPath);
+        var fullPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", trimmedPath));
+        var baseUploadCanonical = Path.GetFullPath(_baseUploadFolder);
+
+        // Security check: Prevent Path Traversal attacks (e.g. /uploads/../../appsettings.json)
+        if (!fullPath.StartsWith(baseUploadCanonical, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
 
         if (File.Exists(fullPath))
         {

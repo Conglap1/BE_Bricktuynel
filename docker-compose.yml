@@ -4,9 +4,7 @@ services:
     container_name: brick_mssql
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Phanconglap1@ProdPass
-    ports:
-      - "1433:1433"
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:-Phanconglap1@ProdPass}
     volumes:
       - mssql_data:/var/opt/mssql/data
     restart: always

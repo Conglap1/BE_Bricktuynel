@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using BrickShowcase.Infrastructure.Data;
 using BrickShowcase.Domain.Entities;
@@ -18,6 +19,7 @@ public class ContactRequestsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<ContactRequestDto>>> GetAll()
     {
         var list = await _db.ContactRequest.OrderByDescending(r => r.CreatedAt).ToListAsync();
@@ -49,6 +51,7 @@ public class ContactRequestsController : ControllerBase
     }
 
     [HttpPut("{id}/mark-read")]
+    [Authorize]
     public async Task<ActionResult<ContactRequestDto>> ToggleRead(int id)
     {
         var req = await _db.ContactRequest.FindAsync(id);
@@ -61,6 +64,7 @@ public class ContactRequestsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         var req = await _db.ContactRequest.FindAsync(id);

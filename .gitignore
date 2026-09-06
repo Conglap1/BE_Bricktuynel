@@ -6,11 +6,14 @@
 *.sln.docstates
 .directory
 
-## Ignore Build & Publish Outputs
+## Ignore Build, Secrets & Publish Outputs
 bin/
 obj/
 publish/
 publish.zip
+*.publishsettings
+.env
+.env.*
 out/
 
 ## Ignore Frontend files (belonging to separate FE repository)
