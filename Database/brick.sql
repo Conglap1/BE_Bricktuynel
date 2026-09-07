@@ -204,7 +204,7 @@ BEGIN
         N'https://facebook.com',
         N'0918701472',
         N'https://tiktok.com',
-        N'https://maps.google.com/maps?q=KCN+My+Phuoc,+Ben+Cat,+Binh+Duong,+Vietnam&t=&z=14&ie=UTF8&iwloc=&output=embed',
+        N'https://maps.google.com/maps?q=C%C3%B4ng+ty+TNHH+M%E1%BB%99t+Th%C3%A0nh+Vi%C3%AAn+Thu%E1%BA%A5n+L%E1%BB%A3i+M%E1%BB%99c+H%C3%B3a,+B%C3%ACnh+Hi%E1%BB%87p,+Ki%E1%BA%BFn+T%C6%B0%E1%BB%9Dng,+Long+An&t=&z=15&ie=UTF8&iwloc=&output=embed',
         N'T2 – T7 · 07:30 – 17:30'
     );
 END;
