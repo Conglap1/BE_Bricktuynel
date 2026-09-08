@@ -15,7 +15,13 @@ public static class DependencyInjection
             ?? "Server=localhost;Database=BrickCompanyDB;User Id=sa;Password=Phanconglap1@;TrustServerCertificate=True;";
 
         services.AddDbContext<BrickDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString, sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 6,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+            }));
 
         services.AddScoped<IFileStorageService, CloudinaryStorageService>();
 
