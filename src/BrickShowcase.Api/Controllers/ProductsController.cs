@@ -126,19 +126,16 @@ public class ProductsController : ControllerBase
             imagesToSave.Add(dto.Image);
         }
 
-        if (imagesToSave.Count > 0)
+        _db.ProductImage.RemoveRange(product.Images);
+        for (int i = 0; i < imagesToSave.Count; i++)
         {
-            _db.ProductImage.RemoveRange(product.Images);
-            for (int i = 0; i < imagesToSave.Count; i++)
+            _db.ProductImage.Add(new ProductImage
             {
-                _db.ProductImage.Add(new ProductImage
-                {
-                    ProductId = product.Id,
-                    ImagePath = imagesToSave[i],
-                    IsThumbnail = i == 0,
-                    DisplayOrder = i + 1
-                });
-            }
+                ProductId = product.Id,
+                ImagePath = imagesToSave[i],
+                IsThumbnail = i == 0,
+                DisplayOrder = i + 1
+            });
         }
 
         await _db.SaveChangesAsync();
@@ -184,6 +181,23 @@ public class ProductsController : ControllerBase
 
     private static string GenerateSlug(string text)
     {
-        return text.ToLowerInvariant().Replace(" ", "-").Replace("đ", "d");
+        if (string.IsNullOrWhiteSpace(text)) return "";
+        var normalized = text.Normalize(System.Text.NormalizationForm.FormD);
+        var sb = new System.Text.StringBuilder();
+        foreach (var c in normalized)
+        {
+            if (System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) != System.Globalization.UnicodeCategory.NonSpacingMark)
+            {
+                sb.Append(c);
+            }
+        }
+        var clean = sb.ToString().Normalize(System.Text.NormalizationForm.FormC)
+            .ToLowerInvariant()
+            .Replace("đ", "d");
+
+        return System.Text.RegularExpressions.Regex.Replace(clean, @"[^a-z0-9\s-]", "")
+            .Trim()
+            .Replace(@"\s+", "-")
+            .Replace(" ", "-");
     }
 }

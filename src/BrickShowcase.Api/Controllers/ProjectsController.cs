@@ -123,19 +123,16 @@ public class ProjectsController : ControllerBase
             imagesToSave.Add(dto.Image);
         }
 
-        if (imagesToSave.Count > 0)
+        _db.ProjectImage.RemoveRange(project.Images);
+        for (int i = 0; i < imagesToSave.Count; i++)
         {
-            _db.ProjectImage.RemoveRange(project.Images);
-            for (int i = 0; i < imagesToSave.Count; i++)
+            _db.ProjectImage.Add(new ProjectImage
             {
-                _db.ProjectImage.Add(new ProjectImage
-                {
-                    ProjectId = project.Id,
-                    ImagePath = imagesToSave[i],
-                    IsThumbnail = (i == 0),
-                    DisplayOrder = i + 1
-                });
-            }
+                ProjectId = project.Id,
+                ImagePath = imagesToSave[i],
+                IsThumbnail = (i == 0),
+                DisplayOrder = i + 1
+            });
         }
 
         await _db.SaveChangesAsync();
@@ -177,6 +174,23 @@ public class ProjectsController : ControllerBase
 
     private static string GenerateSlug(string text)
     {
-        return text.ToLowerInvariant().Replace(" ", "-").Replace("đ", "d");
+        if (string.IsNullOrWhiteSpace(text)) return "";
+        var normalized = text.Normalize(System.Text.NormalizationForm.FormD);
+        var sb = new System.Text.StringBuilder();
+        foreach (var c in normalized)
+        {
+            if (System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c) != System.Globalization.UnicodeCategory.NonSpacingMark)
+            {
+                sb.Append(c);
+            }
+        }
+        var clean = sb.ToString().Normalize(System.Text.NormalizationForm.FormC)
+            .ToLowerInvariant()
+            .Replace("đ", "d");
+
+        return System.Text.RegularExpressions.Regex.Replace(clean, @"[^a-z0-9\s-]", "")
+            .Trim()
+            .Replace(@"\s+", "-")
+            .Replace(" ", "-");
     }
 }
