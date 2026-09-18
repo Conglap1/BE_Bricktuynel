@@ -201,7 +201,7 @@ BEGIN
         N'Ấp Mới, Xã Bình Tân, Thị xã Kiến Tường, Tỉnh Long An',
         N'0918 701 472',
         N'kinhdoanh@gachthuanloi.vn',
-        N'https://facebook.com',
+        NULL,
         N'0918701472',
         N'https://tiktok.com',
         N'https://maps.google.com/maps?q=C%C3%B4ng+ty+TNHH+M%E1%BB%99t+Th%C3%A0nh+Vi%C3%AAn+Thu%E1%BA%A5n+L%E1%BB%A3i+M%E1%BB%99c+H%C3%B3a,+B%C3%ACnh+Hi%E1%BB%87p,+Ki%E1%BA%BFn+T%C6%B0%E1%BB%9Dng,+Long+An&t=&z=15&ie=UTF8&iwloc=&output=embed',
