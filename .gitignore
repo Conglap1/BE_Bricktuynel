@@ -12,6 +12,7 @@ obj/
 publish/
 publish.zip
 *.publishsettings
+*.log
 .env
 .env.*
 out/

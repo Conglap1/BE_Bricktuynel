@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
 using BrickShowcase.Infrastructure.Data;
 using BrickShowcase.Application.DTOs;
@@ -17,14 +19,17 @@ public class AuthController : ControllerBase
 {
     private readonly BrickDbContext _db;
     private readonly IConfiguration _config;
+    private readonly IMemoryCache _cache;
 
-    public AuthController(BrickDbContext db, IConfiguration config)
+    public AuthController(BrickDbContext db, IConfiguration config, IMemoryCache cache)
     {
         _db = db;
         _config = config;
+        _cache = cache;
     }
 
     [HttpPost("login")]
+    [EnableRateLimiting("LoginRateLimit")]
     public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginRequestDto request)
     {
         var username = request.Username?.Trim() ?? "";
@@ -35,10 +40,25 @@ public class AuthController : ControllerBase
             return BadRequest(new LoginResponseDto(false, "", "Vui lòng nhập tài khoản và mật khẩu"));
         }
 
-        var user = await _db.AdminUser.FirstOrDefaultAsync(u => u.Username.Trim() == username);
+        var normalizedUser = username.ToLowerInvariant();
+        var lockKey = $"lockout_{normalizedUser}";
+        var failKey = $"fail_attempts_{normalizedUser}";
+
+        // Check if account is currently locked out
+        if (_cache.TryGetValue(lockKey, out DateTime lockExpires))
+        {
+            var remainingMinutes = Math.Max(1, (int)Math.Ceiling((lockExpires - DateTime.UtcNow).TotalMinutes));
+            return BadRequest(new LoginResponseDto(false, "", $"Tài khoản tạm thời bị khóa do nhập sai mật khẩu quá 5 lần. Vui lòng thử lại sau {remainingMinutes} phút."));
+        }
+
+        var user = await _db.AdminUser.FirstOrDefaultAsync(u => u.Username.Trim().ToLower() == normalizedUser);
 
         if (user != null && VerifyPassword(password, user.PasswordHash))
         {
+            // Reset fail attempts on successful login
+            _cache.Remove(failKey);
+            _cache.Remove(lockKey);
+
             // Auto upgrade legacy SHA256 hash to PBKDF2 with salt
             if (!user.PasswordHash.StartsWith("pbkdf2:"))
             {
@@ -50,11 +70,29 @@ public class AuthController : ControllerBase
             return Ok(new LoginResponseDto(true, token, "Đăng nhập thành công"));
         }
 
-        return BadRequest(new LoginResponseDto(false, "", "Tài khoản hoặc mật khẩu không chính xác"));
+        // Increment failed attempts
+        var attempts = _cache.GetOrCreate(failKey, entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15);
+            return 0;
+        }) + 1;
+
+        _cache.Set(failKey, attempts, TimeSpan.FromMinutes(15));
+
+        if (attempts >= 5)
+        {
+            _cache.Set(lockKey, DateTime.UtcNow.AddMinutes(15), TimeSpan.FromMinutes(15));
+            _cache.Remove(failKey);
+            return BadRequest(new LoginResponseDto(false, "", "Tài khoản tạm thời bị khóa 15 phút do nhập sai mật khẩu quá 5 lần liên tiếp."));
+        }
+
+        var remainingAttempts = 5 - attempts;
+        return BadRequest(new LoginResponseDto(false, "", $"Tài khoản hoặc mật khẩu không chính xác. Bạn còn {remainingAttempts} lần thử trước khi bị khóa tạm thời."));
     }
 
     [HttpPost("change-password")]
     [Authorize]
+    [EnableRateLimiting("LoginRateLimit")]
     public async Task<ActionResult<LoginResponseDto>> ChangePassword([FromBody] ChangePasswordRequestDto request)
     {
         if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.OldPassword) || string.IsNullOrWhiteSpace(request.NewPassword))
@@ -96,7 +134,7 @@ public class AuthController : ControllerBase
             issuer: jwtIssuer,
             audience: jwtAudience,
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(7),
+            expires: DateTime.UtcNow.AddHours(8),
             signingCredentials: creds
         );
 

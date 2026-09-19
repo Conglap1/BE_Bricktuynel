@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using BrickShowcase.Infrastructure.Data;
 using BrickShowcase.Domain.Entities;
@@ -27,11 +28,17 @@ public class ContactRequestsController : ControllerBase
     }
 
     [HttpPost]
+    [EnableRateLimiting("LoginRateLimit")]
     public async Task<ActionResult<ContactRequestDto>> Create([FromBody] CreateContactRequestDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.FullName) || string.IsNullOrWhiteSpace(dto.Phone))
         {
             return BadRequest("Họ tên và Số điện thoại là bắt buộc.");
+        }
+
+        if (dto.FullName.Length > 100 || dto.Phone.Length > 20 || (dto.Email != null && dto.Email.Length > 150) || (dto.Content != null && dto.Content.Length > 3000))
+        {
+            return BadRequest("Dữ liệu gửi lên vượt quá độ dài quy định.");
         }
 
         var req = new ContactRequest

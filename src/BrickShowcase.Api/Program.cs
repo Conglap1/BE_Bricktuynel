@@ -6,10 +6,13 @@ using Microsoft.IdentityModel.Tokens;
 using BrickShowcase.Infrastructure;
 using BrickShowcase.Infrastructure.Data;
 
+using Microsoft.AspNetCore.HttpOverrides;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddMemoryCache();
 builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 52_428_800; // 50MB max file size
@@ -19,6 +22,14 @@ builder.Services.AddOpenApi();
 
 // Register Infrastructure services (DbContext, FileStorage, etc.)
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+// Configure Forwarded Headers for Nginx / Reverse Proxy
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 // Configure Rate Limiting to protect against DDoS, Bot spam, and Brute Force attacks
 builder.Services.AddRateLimiter(options =>
@@ -30,10 +41,31 @@ builder.Services.AddRateLimiter(options =>
         await context.HttpContext.Response.WriteAsync("{\"message\": \"Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau ít phút.\"}", token);
     };
 
+    // Dedicated Login Rate Limiting: max 5 attempts per minute per IP
+    options.AddPolicy("LoginRateLimit", httpContext =>
+    {
+        var clientIp = httpContext.Connection.RemoteIpAddress?.ToString()
+            ?? httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+            ?? "unknown";
+
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: clientIp,
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = 5,
+                QueueLimit = 0,
+                Window = TimeSpan.FromMinutes(1)
+            });
+    });
+
     // Global IP Rate Limiting: max 100 requests per minute per IP
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
     {
-        var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        var clientIp = httpContext.Connection.RemoteIpAddress?.ToString()
+            ?? httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+            ?? "unknown";
+
         return RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: clientIp,
             factory: _ => new FixedWindowRateLimiterOptions
@@ -79,14 +111,14 @@ builder.Services.AddAuthorization();
 var rawAllowedOrigins = builder.Configuration["AllowedOrigins"] ?? "";
 var allowedOrigins = rawAllowedOrigins
     .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-    .Where(o => !string.IsNullOrWhiteSpace(o))
+    .Where(o => !string.IsNullOrWhiteSpace(o) && o != "*")
     .ToArray();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        if (allowedOrigins.Length > 0 && !allowedOrigins.Contains("*"))
+        if (allowedOrigins.Length > 0)
         {
             policy.WithOrigins(allowedOrigins)
                   .AllowAnyHeader()
@@ -95,8 +127,15 @@ builder.Services.AddCors(options =>
         }
         else
         {
-            // Fallback for development / initial deployment
-            policy.SetIsOriginAllowed(origin => true)
+            // In development or local default, allow localhost origins
+            policy.SetIsOriginAllowed(origin =>
+                  {
+                      if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+                      {
+                          return uri.Host == "localhost" || uri.Host == "127.0.0.1";
+                      }
+                      return false;
+                  })
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
@@ -105,6 +144,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseForwardedHeaders();
 
 // Global Exception Handler Middleware to prevent stack trace leaks
 app.Use(async (context, next) =>
@@ -132,6 +173,7 @@ app.Use(async (context, next) =>
     context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
     context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
     context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
     await next();
 });
 
