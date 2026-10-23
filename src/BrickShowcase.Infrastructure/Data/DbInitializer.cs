@@ -53,16 +53,27 @@ public static class DbInitializer
             Console.WriteLine($"[DB MIGRATION ERROR]: {ex.Message}");
         }
 
-        // Seed AdminUser if not exists
+        // Seed AdminUser if not exists and configured via environment variable
         var adminUser = await db.AdminUser.FirstOrDefaultAsync(u => u.Username == "admin");
         if (adminUser == null)
         {
-            db.AdminUser.Add(new AdminUser
+            var initialPass = Environment.GetEnvironmentVariable("ADMIN_INITIAL_PASSWORD");
+            if (!string.IsNullOrWhiteSpace(initialPass))
             {
-                Username = "admin",
-                PasswordHash = "184ea4c56b9455ab63ba14510a314c1e93f7ccac6f77c41605b54f198b1ce6f5"
-            });
-            await db.SaveChangesAsync();
+                var salt = System.Security.Cryptography.RandomNumberGenerator.GetBytes(16);
+                var hash = System.Security.Cryptography.Rfc2898DeriveBytes.Pbkdf2(
+                    initialPass.Trim(), salt, 100000, 
+                    System.Security.Cryptography.HashAlgorithmName.SHA256, 32);
+                var saltHex = Convert.ToHexString(salt).ToLowerInvariant();
+                var hashHex = Convert.ToHexString(hash).ToLowerInvariant();
+
+                db.AdminUser.Add(new AdminUser
+                {
+                    Username = "admin",
+                    PasswordHash = $"pbkdf2:100000:{saltHex}:{hashHex}"
+                });
+                await db.SaveChangesAsync();
+            }
         }
 
         // Seed Initial Products if empty

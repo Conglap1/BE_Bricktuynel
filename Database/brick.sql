@@ -185,12 +185,7 @@ END;
 -- SEED DỮ LIỆU BAN ĐẦU (INITIAL DATA CHUẨN KỸ THUẬT)
 -- ==========================================================
 
-/* Admin Account (admin / 01242968084Aa) */
-IF NOT EXISTS (SELECT 1 FROM AdminUser WHERE Username = N'admin')
-BEGIN
-    INSERT INTO AdminUser (Username, PasswordHash)
-    VALUES (N'admin', N'184ea4c56b9455ab63ba14510a314c1e93f7ccac6f77c41605b54f198b1ce6f5');
-END;
+/* Admin Account: Quản trị viên được khởi tạo qua biến môi trường hoặc cấu hình bảo mật riêng */
 
 /* Contact Info */
 IF NOT EXISTS (SELECT 1 FROM ContactInfo)
