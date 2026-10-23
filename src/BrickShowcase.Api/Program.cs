@@ -10,6 +10,28 @@ using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load .env file if it exists (for local development secrets without committing to git)
+var rootEnv = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+var appEnv = Path.Combine(builder.Environment.ContentRootPath, ".env");
+var envPath = File.Exists(appEnv) ? appEnv : (File.Exists(rootEnv) ? rootEnv : null);
+
+if (envPath != null)
+{
+    foreach (var line in File.ReadAllLines(envPath))
+    {
+        var trimmed = line.Trim();
+        if (string.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith('#')) continue;
+        var parts = trimmed.Split('=', 2);
+        if (parts.Length == 2)
+        {
+            var key = parts[0].Trim();
+            var val = parts[1].Trim().Trim('"').Trim('\'');
+            Environment.SetEnvironmentVariable(key, val);
+            builder.Configuration[key] = val;
+        }
+    }
+}
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();

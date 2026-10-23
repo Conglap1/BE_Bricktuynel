@@ -48,6 +48,8 @@ Thêm các key sau:
 4. `Jwt__Audience`: `BrickShowcaseClient`
 5. `AllowedOrigins`:
    - **Value**: `https://your-app-name.vercel.app,https://gachthuanloi.vn` *(Điền domain Vercel và domain chính thức của bạn để khóa CORS)*
+6. `CLOUDINARY_URL` (hoặc 3 biến `Cloudinary__CloudName`, `Cloudinary__ApiKey`, `Cloudinary__ApiSecret`):
+   - **Value**: `cloudinary://<API_KEY>:<API_SECRET>@<CLOUD_NAME>` *(Cấu hình để Backend lưu trữ và tối ưu hình ảnh trực tiếp lên Cloudinary mà không cần lưu key trong code)*
 
 ### Bước 2: Bắt Buộc HTTPS
 Vào **Settings** -> **TLS/SSL settings** -> Bật `HTTPS Only` = **On**. Mọi kết nối HTTP thường sẽ tự động chuyển hướng mã hóa HTTPS.

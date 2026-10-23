@@ -14,18 +14,27 @@ public class CloudinaryStorageService : IFileStorageService
     {
         _localFallbackService = new FileStorageService();
 
-        var cloudName = configuration["Cloudinary:CloudName"];
-        var apiKey = configuration["Cloudinary:ApiKey"];
-        var apiSecret = configuration["Cloudinary:ApiSecret"];
-
-        if (!string.IsNullOrWhiteSpace(cloudName) && 
-            !string.IsNullOrWhiteSpace(apiKey) && 
-            !string.IsNullOrWhiteSpace(apiSecret) &&
-            cloudName != "YOUR_CLOUD_NAME")
+        var cloudinaryUrl = configuration["CLOUDINARY_URL"] ?? Environment.GetEnvironmentVariable("CLOUDINARY_URL");
+        if (!string.IsNullOrWhiteSpace(cloudinaryUrl))
         {
-            var account = new Account(cloudName, apiKey, apiSecret);
-            _cloudinary = new Cloudinary(account);
+            _cloudinary = new Cloudinary(cloudinaryUrl);
             _cloudinary.Api.Secure = true;
+        }
+        else
+        {
+            var cloudName = configuration["Cloudinary:CloudName"] ?? Environment.GetEnvironmentVariable("Cloudinary__CloudName");
+            var apiKey = configuration["Cloudinary:ApiKey"] ?? Environment.GetEnvironmentVariable("Cloudinary__ApiKey");
+            var apiSecret = configuration["Cloudinary:ApiSecret"] ?? Environment.GetEnvironmentVariable("Cloudinary__ApiSecret");
+
+            if (!string.IsNullOrWhiteSpace(cloudName) && 
+                !string.IsNullOrWhiteSpace(apiKey) && 
+                !string.IsNullOrWhiteSpace(apiSecret) &&
+                cloudName != "YOUR_CLOUD_NAME")
+            {
+                var account = new Account(cloudName, apiKey, apiSecret);
+                _cloudinary = new Cloudinary(account);
+                _cloudinary.Api.Secure = true;
+            }
         }
     }
 
