@@ -17,11 +17,18 @@ public class FileStorageService : IFileStorageService
 
     public async Task<string> SaveFileAsync(Stream fileStream, string fileName, string subFolder = "general")
     {
-        // Sanitize subFolder name to prevent directory traversal
-        var safeFolder = string.Join("_", subFolder.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries)).ToLowerInvariant();
+        // Sanitize subFolder name: only allow alphanumeric, underscores, and dashes to prevent directory traversal
+        var safeFolder = System.Text.RegularExpressions.Regex.Replace(subFolder ?? "", @"[^a-zA-Z0-9_-]", "").ToLowerInvariant();
         if (string.IsNullOrWhiteSpace(safeFolder)) safeFolder = "general";
 
         var targetDir = Path.Combine(_baseUploadFolder, safeFolder);
+        var canonicalTarget = Path.GetFullPath(targetDir);
+        var canonicalBase = Path.GetFullPath(_baseUploadFolder);
+        if (!canonicalTarget.StartsWith(canonicalBase, StringComparison.OrdinalIgnoreCase))
+        {
+            targetDir = Path.Combine(_baseUploadFolder, "general");
+            safeFolder = "general";
+        }
         if (!Directory.Exists(targetDir))
         {
             Directory.CreateDirectory(targetDir);

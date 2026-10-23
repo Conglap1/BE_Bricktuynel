@@ -46,7 +46,7 @@ public class CloudinaryStorageService : IFileStorageService
             return await _localFallbackService.SaveFileAsync(fileStream, fileName, subFolder);
         }
 
-        var safeFolder = string.Join("_", subFolder.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries)).ToLowerInvariant();
+        var safeFolder = System.Text.RegularExpressions.Regex.Replace(subFolder ?? "", @"[^a-zA-Z0-9_-]", "").ToLowerInvariant();
         if (string.IsNullOrWhiteSpace(safeFolder)) safeFolder = "general";
 
         var uploadParams = new ImageUploadParams
