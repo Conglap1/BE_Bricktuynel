@@ -16,6 +16,8 @@ publish.zip
 .env
 .env.*
 out/
+docker-compose*.yml
+!docker-compose.example.yml
 
 ## Ignore Frontend files (belonging to separate FE repository)
 FE SRC/

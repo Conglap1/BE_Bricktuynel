@@ -1,3 +1,6 @@
+# Docker Compose Local Development Example
+# Copy this file to docker-compose.yml and set your local environment values:
+
 services:
   database:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -12,15 +15,15 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile
     container_name: brick_backend
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=database,1433;Database=BrickCompanyDB;User Id=sa;Password=${MSSQL_SA_PASSWORD:-YourStrongLocalPassword123!};TrustServerCertificate=True;
-      - Jwt__SecretKey=SuperSecretKeyForBrickShowcaseApiProductionEnvironment2026!
+      - Jwt__SecretKey=${JWT_SECRET_KEY:-YourRandomJwtSecretKeyWithAtLeast32Characters!}
       - Jwt__Issuer=BrickShowcaseApi
       - Jwt__Audience=BrickShowcaseClient
-      - AllowedOrigins=*
+      - AllowedOrigins=http://localhost:5173,http://localhost:3000
     ports:
       - "5247:8080"
     depends_on:
@@ -28,17 +31,6 @@ services:
     restart: always
     volumes:
       - uploads_data:/app/wwwroot/uploads
-
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    container_name: brick_frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-    restart: always
 
 volumes:
   mssql_data:
