@@ -1,0 +1,65 @@
+name: Deploy Backend (.NET 9) to Cloud VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '9.0.x'
+
+jobs:
+  build-and-test:
+    name: Build & Verify Solution
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore Dependencies
+        run: dotnet restore BrickShowcase.sln
+
+      - name: Build Project
+        run: dotnet build BrickShowcase.sln --configuration Release --no-restore
+
+  deploy-to-vps:
+    name: Deploy to VPS
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy on VPS via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script_stop: true
+          script: |
+            echo "==> Navigating to project directory..."
+            cd /opt/webgach
+
+            echo "==> Fetching latest changes from GitHub..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "==> Rebuilding backend Docker container..."
+            docker compose build backend
+
+            echo "==> Restarting backend service..."
+            docker compose up -d backend
+
+            echo "==> Cleaning up unused dangling Docker images..."
+            docker image prune -f
+
+            echo "==> Health check API..."
+            sleep 3
+            curl -f -s http://127.0.0.1:5247/api/products > /dev/null && echo "✅ API is healthy and responding!"
