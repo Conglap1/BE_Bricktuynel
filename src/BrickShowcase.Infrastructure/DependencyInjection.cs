@@ -12,15 +12,15 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? "Server=localhost;Database=BrickCompanyDB;User Id=sa;Password=Phanconglap1@;TrustServerCertificate=True;";
+            ?? "Host=localhost;Port=5432;Database=BrickCompanyDB;Username=postgres;Password=postgres;";
 
         services.AddDbContext<BrickDbContext>(options =>
-            options.UseSqlServer(connectionString, sqlOptions =>
+            options.UseNpgsql(connectionString, npgsqlOptions =>
             {
-                sqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: 6,
+                npgsqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(30),
-                    errorNumbersToAdd: null);
+                    errorCodesToAdd: null);
             }));
 
         services.AddScoped<IFileStorageService, CloudinaryStorageService>();

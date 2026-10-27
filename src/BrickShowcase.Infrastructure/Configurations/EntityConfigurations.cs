@@ -35,7 +35,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.IsFeatured).HasDefaultValue(false);
         builder.Property(x => x.DisplayOrder).HasDefaultValue(0);
         builder.Property(x => x.IsActive).HasDefaultValue(true);
-        builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+        builder.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.HasMany(x => x.Images)
             .WithOne(x => x.Product)
@@ -71,7 +71,7 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(x => x.DisplayOrder).HasDefaultValue(0);
         builder.Property(x => x.IsFeatured).HasDefaultValue(false);
         builder.Property(x => x.IsActive).HasDefaultValue(true);
-        builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+        builder.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.HasMany(x => x.Images)
             .WithOne(x => x.Project)
@@ -103,7 +103,7 @@ public class NewsConfiguration : IEntityTypeConfiguration<News>
         builder.HasIndex(x => x.Slug).IsUnique();
         builder.Property(x => x.ThumbnailPath).HasMaxLength(500);
         builder.Property(x => x.IsActive).HasDefaultValue(true);
-        builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+        builder.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.HasMany(x => x.Sections)
             .WithOne(x => x.News)
@@ -188,6 +188,6 @@ public class ContactRequestConfiguration : IEntityTypeConfiguration<ContactReque
         builder.Property(x => x.Email).HasMaxLength(100);
         builder.Property(x => x.Content).IsRequired();
         builder.Property(x => x.IsRead).HasDefaultValue(false);
-        builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()");
+        builder.Property(x => x.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
     }
 }

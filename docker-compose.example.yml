@@ -3,13 +3,16 @@
 
 services:
   database:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: brick_mssql
+    image: postgres:16-alpine
+    container_name: brick_postgres
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:-YourStrongLocalPassword123!}
+      - POSTGRES_DB=BrickCompanyDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-YourStrongLocalPassword123!}
+    ports:
+      - "5432:5432"
     volumes:
-      - mssql_data:/var/opt/mssql/data
+      - postgres_data:/var/lib/postgresql/data
     restart: always
 
   backend:
@@ -19,7 +22,7 @@ services:
     container_name: brick_backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=database,1433;Database=BrickCompanyDB;User Id=sa;Password=${MSSQL_SA_PASSWORD:-YourStrongLocalPassword123!};TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Host=database;Port=5432;Database=BrickCompanyDB;Username=postgres;Password=${POSTGRES_PASSWORD:-YourStrongLocalPassword123!};
       - Jwt__SecretKey=${JWT_SECRET_KEY:-YourRandomJwtSecretKeyWithAtLeast32Characters!}
       - Jwt__Issuer=BrickShowcaseApi
       - Jwt__Audience=BrickShowcaseClient
@@ -33,5 +36,5 @@ services:
       - uploads_data:/app/wwwroot/uploads
 
 volumes:
-  mssql_data:
+  postgres_data:
   uploads_data:

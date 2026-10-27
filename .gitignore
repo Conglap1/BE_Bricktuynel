@@ -19,6 +19,36 @@ out/
 docker-compose*.yml
 !docker-compose.example.yml
 
+## Ignore Database Backups, Dumps & Real Data from Azure (CRITICAL)
+*.bacpac
+*.bak
+*.mdf
+*.ldf
+*.dump
+*.sql.gz
+*.sql.tar.gz
+Database/dumps/
+Database/backup/
+Database/real_*
+Database/*_real.*
+Database/*_backup.*
+Database/azure_*
+Database/BrickCompanyDB*
+real_*.sql
+backup_*.sql
+
+## Ignore SSH & SSL Keys, Certificates & Secrets
+*.pem
+*.key
+*.crt
+*.cer
+*.pfx
+*.p12
+id_rsa*
+known_hosts*
+secrets/
+*.secret.*
+
 ## Ignore Frontend files (belonging to separate FE repository)
 FE SRC/
 Dockerfile.frontend
