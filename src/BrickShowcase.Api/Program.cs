@@ -140,28 +140,27 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        if (allowedOrigins.Length > 0)
-        {
-            policy.WithOrigins(allowedOrigins)
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials();
-        }
-        else
-        {
-            // In development or local default, allow localhost origins
-            policy.SetIsOriginAllowed(origin =>
+        policy.SetIsOriginAllowed(origin =>
+              {
+                  if (string.IsNullOrWhiteSpace(origin)) return false;
+                  if (allowedOrigins.Length > 0 && allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase))
                   {
-                      if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
-                      {
-                          return uri.Host == "localhost" || uri.Host == "127.0.0.1";
-                      }
-                      return false;
-                  })
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials();
-        }
+                      return true;
+                  }
+                  if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+                  {
+                      var host = uri.Host.ToLowerInvariant();
+                      return host == "localhost" ||
+                             host == "127.0.0.1" ||
+                             host == "gachtuynelthuanloi.com" ||
+                             host.EndsWith(".gachtuynelthuanloi.com") ||
+                             host.EndsWith(".vercel.app");
+                  }
+                  return false;
+              })
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
